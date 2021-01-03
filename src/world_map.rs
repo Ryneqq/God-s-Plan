@@ -1,21 +1,24 @@
 use bevy::prelude::Vec3;
-
-const CENTER: Vec3 = Vec3::zero();
+use crate::Hexagon;
 
 #[derive(Debug, Clone)]
 pub struct WorldMap {
-    edge: usize,
+    edge: f32,
+    normal: f32,
+    hexagon: Hexagon
 }
 
 impl WorldMap {
-    pub fn new(edge: usize) -> Self {
-        Self { edge }
+    pub fn new(edge: f32) -> Self {
+        let normal = edge as f32 * 3f32.sqrt() / 2f32;
+        let hexagon = Hexagon::new(edge, Vec3::zero());
+
+        Self { edge, normal, hexagon }
     }
 
-    pub fn offset(&self, point: Vec3) -> Vec3 {
-        let x = point.x as usize % self.edge;
-        let y = point.y as usize % self.edge;
-
-        unimplemented!() // TODO
+    pub fn render(&'_ self) -> impl Iterator<Item = Vec3> + '_ {
+        self.hexagon
+            .neighbors(4)
+            .map(|hexagon| hexagon.world())
     }
 }

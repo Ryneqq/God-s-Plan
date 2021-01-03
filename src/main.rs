@@ -1,16 +1,14 @@
 mod app;
-mod scene;
-mod nodes;
 mod world_map;
+mod hexagon;
 
-pub use scene::*;
-pub use nodes::*;
+pub use world_map::*;
+pub use hexagon::*;
 
 pub mod consts {
     pub const WINDOW_HEIGHT: usize = 800;
     pub const WINDOW_WIDTH: usize = 800;
-    pub const SCENE_TAIL_SIZE: usize = 16;
-    pub const GRID_SIZE: usize = 2;
+    pub const SCENE_TILE_SIZE: f32 = 1.1;
 }
 
 fn main() {
