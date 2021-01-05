@@ -8,7 +8,7 @@ pub use hexagon::*;
 pub mod consts {
     pub const WINDOW_HEIGHT: usize = 800;
     pub const WINDOW_WIDTH: usize = 800;
-    pub const SCENE_TILE_SIZE: f32 = 1.1;
+    pub const SCENE_TILE_SIZE: f32 = 1.05;
 }
 
 fn main() {
