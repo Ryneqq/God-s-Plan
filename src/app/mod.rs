@@ -18,9 +18,9 @@ pub fn run_app() {
             resizable: false,
             ..Default::default()
         })
-        .add_resource(ClearColor(Color::rgb(0.0, 0.0, 0.0)))
+        .add_resource(ClearColor(Color::rgb(0.5, 0.5, 0.5)))
         .add_resource(mouse::MousePosition::default())
-        .add_resource(WorldMap::new(SCENE_TILE_SIZE))
+        .add_resource(WorldMap::new(SCENE_TILE_SIZE, 4))
         .add_plugins(DefaultPlugins)
         .add_plugin(PickingPlugin)
         .add_plugin(InteractablePickingPlugin)
