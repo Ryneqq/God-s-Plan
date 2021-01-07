@@ -2,14 +2,15 @@ use crate::consts::*;
 use bevy::{
     prelude::*,
     window::CursorMoved,
-    input::mouse::MouseWheel,
+    input::mouse::{MouseMotion, MouseWheel},
     render::camera::Camera
 };
 
 #[derive(Default)]
 pub struct MouseState {
     cursor_moved_event_reader: EventReader<CursorMoved>,
-    mouse_wheel_event_reader: EventReader<MouseWheel>
+    mouse_wheel_event_reader: EventReader<MouseWheel>,
+    mouse_motion_event_reader: EventReader<MouseMotion>,
 }
 
 #[derive(Debug, Default)]
@@ -52,6 +53,34 @@ pub (super) fn mouse_scroll(
             let direction = quat_to_direction(transform.rotation);
             let scroll = event.y;
             transform.translation += direction * scroll;
+        }
+    }
+}
+
+pub (super) fn mouse_drag(
+    mut state: Local<MouseState>,
+    mouse_button_input: Res<Input<MouseButton>>,
+    mouse_motion_events: Res<Events<MouseMotion>>,
+    mut camera_query: Query<(&Camera, &mut Transform)>
+) {
+    if mouse_button_input.pressed(MouseButton::Left)  {
+        for (_, mut transform) in camera_query.iter_mut() {
+            for event in state.mouse_motion_event_reader.iter(&mouse_motion_events) {
+                let magnitude = 0.004;
+                let drag_vec = event.delta * magnitude;
+                let camera_drag = Quat::from_rotation_y(drag_vec.x) * Quat::from_rotation_x(drag_vec.y);
+
+                transform.rotation *= camera_drag;
+            }
+        }
+    } else if mouse_button_input.pressed(MouseButton::Right)  {
+        for (_, ref mut transform) in camera_query.iter_mut() {
+            for event in state.mouse_motion_event_reader.iter(&mouse_motion_events) {
+                let drag_vec = transform.rotation * Vec3::new(-event.delta.x, event.delta.y, 0f32);
+                let magnitude = 0.1;
+
+                transform.translation += drag_vec * magnitude;
+            }
         }
     }
 }

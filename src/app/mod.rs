@@ -28,6 +28,7 @@ pub fn run_app() {
         .add_system(mouse::mouse_position.system())
         .add_system(mouse::mouse_click.system())
         .add_system(mouse::mouse_scroll.system())
+        .add_system(mouse::mouse_drag.system())
         .add_system(update::update.system())
         .add_system(set_highlight_params.system()) // move to some location as `picker`
         .run();
