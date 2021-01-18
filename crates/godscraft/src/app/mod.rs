@@ -23,6 +23,7 @@ pub fn run_app() {
         .add_resource(WorldMap::new(SCENE_TILE_SIZE, 4))
         .add_plugins(DefaultPlugins)
         .add_plugin(PickingPlugin)
+        // .add_plugin(DebugPickingPlugin)
         .add_plugin(InteractablePickingPlugin)
         .add_startup_system(setup::setup.system())
         .add_system(mouse::mouse_position.system())

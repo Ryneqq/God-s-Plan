@@ -1,20 +1,5 @@
-[package]
-name = "gods_plan"
-version = "0.1.0"
-authors = ["Pawel Rynowiecki <p.rynowiecki@gmail.pl>"]
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-itertools = "0.9.0"
-bevy_mod_picking = "0.3.2"
-bevy = "0.4.0"
-serde = "1.0.118"
-serde_json = "1.0.61"
-
-[dev-dependencies]
-test-case = "1.0.0"
+[workspace]
+members = [ "crates/*" ]
 
 [profile.dev.package."*"]
 opt-level = 3
