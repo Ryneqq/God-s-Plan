@@ -1,6 +1,7 @@
 use bevy::prelude::*;
 use bevy_mod_picking::*;
 use crate::WorldMap;
+use super::config::Config;
 
 pub (super) fn setup(
     commands: &mut Commands,
@@ -8,8 +9,9 @@ pub (super) fn setup(
     mut meshes: ResMut<Assets<Mesh>>,
     mut materials: ResMut<Assets<StandardMaterial>>,
     world: Res<WorldMap>,
+    config: Res<Config>,
 ) {
-    let empty_hextile = asset_server.load("tiles/empty/plane/empty_hextile_plane.gltf#Mesh0/Primitive0");
+    let empty_hextile = asset_server.load("tiles/empty/plane/empty_hextile_plane.gltf#Mesh0/Primitive0"); // TODO: Should be in config files
     let hextile = asset_server.load("tiles/forest_4/lasiglasty.gltf");
     let mut transform = Transform::from_translation(Vec3::zero())
         .looking_at(Vec3::unit_x(), Vec3::unit_z());
@@ -17,8 +19,8 @@ pub (super) fn setup(
     commands
         .spawn(Camera3dBundle {
             transform: {
-                let mut transform = Transform::from_translation(Vec3::new(0.0, -2.0, 25.0));
-                let rotation = Quat::from_rotation_x(0.1);
+                let mut transform = Transform::from_translation(Vec3::new(0.0, -2.0, 25.0)); // TODO: Config file
+                let rotation = Quat::from_rotation_x(0.1); // TODO: Same
                 // let rotation = Quat::from_rotation_x(0.2);
 
                 // * side view
@@ -52,7 +54,7 @@ pub (super) fn setup(
                 parent.spawn(PbrBundle {
                     mesh: empty_hextile.clone(),
                     material: materials.add(Color::rgb(0.5, 0.5, 0.5).into()),
-                    transform: Transform::from_translation(Vec3::new(0.0, 0.19, 0.0)), // TODO: Add 0.2 as defualt hegiht of the field
+                    transform: Transform::from_translation(Vec3::new(0.0, 0.19, 0.0)), // TODO: Config
                     ..Default::default()
                 })
                 .with(PickableMesh::default())

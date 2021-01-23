@@ -1,26 +1,27 @@
 use bevy::prelude::*;
 use bevy_mod_picking::*;
-use crate::consts::*;
 use crate::WorldMap;
 
 mod setup;
 mod mouse;
 mod update;
+pub mod config;
 
-pub fn run_app() {
+pub fn run_app(config: config::Config) {
     App::build()
         .add_resource(Msaa { samples: 4 })
         .add_resource(WindowDescriptor {
-            title: "God's Plan".to_string(),
-            width: WINDOW_WIDTH as f32,
-            height: WINDOW_HEIGHT as f32,
+            title: "Godscraft".to_string(),
+            width: config.window_width() as f32,
+            height: config.window_height() as f32,
             vsync: true,
             resizable: false,
             ..Default::default()
         })
         .add_resource(ClearColor(Color::rgb(0.5, 0.5, 0.5)))
         .add_resource(mouse::MousePosition::default())
-        .add_resource(WorldMap::new(SCENE_TILE_SIZE, 4))
+        .add_resource(WorldMap::new(config.tile_radius(), config.map_size()))
+        .add_resource(config)
         .add_plugins(DefaultPlugins)
         .add_plugin(PickingPlugin)
         // .add_plugin(DebugPickingPlugin)

@@ -28,7 +28,7 @@ impl WorldMap {
 
         iter.clone()
             .cartesian_product(iter.clone())
-            .cartesian_product(iter)
+            .cartesian_product(iter) // TODO: This can be optimized
             .filter_map(|((x, y), z)| if x + y + z == 0 { Some((x, y, z)) } else { None })
             .map(move |(x, y, z)| {
                 let hexagon = Hexagon::default().calculate_position(edge, x, y, z);
