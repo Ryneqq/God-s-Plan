@@ -1,4 +1,3 @@
-use crate::consts::*;
 use bevy::{
     prelude::*,
     window::CursorMoved,
@@ -28,21 +27,6 @@ pub (super) fn mouse_position(
     }
 }
 
-pub (super) fn mouse_click(
-    mouse_button: Res<Input<MouseButton>>,
-    mouse_position: Res<MousePosition>,
-) {
-    if mouse_button.just_pressed(MouseButton::Left) {
-        let mouse_pos = mouse_position.position;
-        let _mouse_pos = Vec2::new(
-            mouse_pos.x - WINDOW_WIDTH as f32 / 2.,
-            mouse_pos.y - WINDOW_HEIGHT as f32 / 2.,
-        );
-
-        // TODO
-    }
-}
-
 pub (super) fn mouse_scroll(
     mut state: Local<MouseState>,
     mouse_wheel_events: Res<Events<MouseWheel>>,
@@ -63,17 +47,7 @@ pub (super) fn mouse_drag(
     mouse_motion_events: Res<Events<MouseMotion>>,
     mut camera_query: Query<(&Camera, &mut Transform)>
 ) {
-    if mouse_button_input.pressed(MouseButton::Left)  {
-        for (_, mut transform) in camera_query.iter_mut() {
-            for event in state.mouse_motion_event_reader.iter(&mouse_motion_events) {
-                let magnitude = 0.004;
-                let drag_vec = event.delta * magnitude;
-                let camera_drag = Quat::from_rotation_y(drag_vec.x) * Quat::from_rotation_x(drag_vec.y);
-
-                transform.rotation *= camera_drag;
-            }
-        }
-    } else if mouse_button_input.pressed(MouseButton::Right)  {
+     if mouse_button_input.pressed(MouseButton::Right)  {
         for (_, ref mut transform) in camera_query.iter_mut() {
             for event in state.mouse_motion_event_reader.iter(&mouse_motion_events) {
                 let drag_vec = transform.rotation * Vec3::new(-event.delta.x, event.delta.y, 0f32);
@@ -84,6 +58,25 @@ pub (super) fn mouse_drag(
         }
     }
 }
+
+// pub (super) fn camera_rotation(
+//     mut state: Local<MouseState>,
+//     mouse_button_input: Res<Input<MouseButton>>,
+//     mouse_motion_events: Res<Events<MouseMotion>>,
+//     mut camera_query: Query<(&Camera, &mut Transform)>
+// ) {
+//     if mouse_button_input.pressed(MouseButton::Left)  {
+//         for (_, mut transform) in camera_query.iter_mut() {
+//             for event in state.mouse_motion_event_reader.iter(&mouse_motion_events) {
+//                 let magnitude = 0.004;
+//                 let drag_vec = event.delta * magnitude;
+//                 let camera_drag = Quat::from_rotation_y(drag_vec.x) * Quat::from_rotation_x(drag_vec.y);
+
+//                 transform.rotation *= camera_drag;
+//             }
+//         }
+//     }
+// }
 
 fn quat_to_direction(quat: Quat) -> Vec3 {
     let [x, y, z, w] = quat.as_ref();

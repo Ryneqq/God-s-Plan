@@ -12,15 +12,15 @@ pub (super) fn setup(
     config: Res<Config>,
 ) {
     let empty_hextile = asset_server.load("tiles/empty/plane/empty_hextile_plane.gltf#Mesh0/Primitive0"); // TODO: Should be in config files
-    let hextile = asset_server.load("tiles/forest_4/lasiglasty.gltf");
+    let hextile = asset_server.load("tiles/forest/lasiglasty.gltf");
     let mut transform = Transform::from_translation(Vec3::zero())
         .looking_at(Vec3::unit_x(), Vec3::unit_z());
 
     commands
         .spawn(Camera3dBundle {
             transform: {
-                let mut transform = Transform::from_translation(Vec3::new(0.0, -2.0, 25.0)); // TODO: Config file
-                let rotation = Quat::from_rotation_x(0.1); // TODO: Same
+                let mut transform = Transform::from_translation(config.camera_position());
+                let rotation = Quat::from_rotation_x(config.camera_angle());
                 // let rotation = Quat::from_rotation_x(0.2);
 
                 // * side view

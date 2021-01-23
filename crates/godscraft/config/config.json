@@ -8,5 +8,9 @@
         "tile_height": 0.2,
         "highlight_tile_pos_x": 0.19,
         "map_size": 10
+    },
+    "camera": {
+        "position": [0.0, -2.0, 25.0],
+        "angle": 0.1
     }
 }

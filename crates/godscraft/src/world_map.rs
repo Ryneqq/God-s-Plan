@@ -19,6 +19,8 @@ impl WorldMap {
     }
 
     pub fn render(&'_ self) -> impl Iterator<Item = Vec3> + '_ {
+        println!("Map tiles: {}", self.world_map.iter().count());
+
         self.world_map.values()
             .map(|hexagon| hexagon.world())
     }

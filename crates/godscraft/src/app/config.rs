@@ -8,6 +8,7 @@ const DEFAULT_WINDOW_WIDTH: usize = 800;
 pub struct Config {
     pub window: Option<WindowConfig>,
     pub world_map: WorldMapConfig,
+    pub camera: Camera,
 }
 
 impl Config {
@@ -38,6 +39,14 @@ impl Config {
     pub fn map_size(&self) -> isize {
         self.world_map.map_size
     }
+
+    pub fn camera_position(&self) -> Vec3 {
+        self.camera.position
+    }
+
+    pub fn camera_angle(&self) -> f32 {
+        self.camera.angle
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -47,9 +56,32 @@ pub struct WindowConfig {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WorldMapConfig { // TODO this should be other file, like path to other config file
+pub struct WorldMapConfig {
     pub tile_radius: f32,
     pub tile_height: f32,
     pub highlight_tile_pos_x: f32,
     pub map_size: isize, // TODO: for future i have to keep here some boundries?
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Camera {
+    pub position: Vec3,
+    pub angle: f32,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_camera_serailization() {
+        let camera = Camera {
+            position: Vec3::zero(),
+            angle: 1.0
+        };
+        let json = serde_json::to_string_pretty(&camera).unwrap();
+        println!("{}", json);
+
+        panic!();
+    }
 }

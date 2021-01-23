@@ -8,7 +8,7 @@ pub use hexagon::*;
 use std::fs;
 use app::config::Config;
 
-const CONFIG_PATH: &str = "crates/godscraft/assets/config/config.json";
+const CONFIG_PATH: &str = "crates/godscraft/config/config.json";
 
 // TODO: Add this as configuration file
 pub mod consts {
