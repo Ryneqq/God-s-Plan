@@ -1,5 +1,9 @@
+mod world_map_config;
+
+pub use self::world_map_config::Tiles;
+use self::world_map_config::WorldMapConfig;
 use serde::{Serialize, Deserialize};
-use bevy::prelude::Vec3;
+use bevy::prelude::{Vec2, Vec3, Color, Light};
 
 const DEFAULT_WINDOW_HEIGHT: usize = 800;
 const DEFAULT_WINDOW_WIDTH: usize = 800;
@@ -8,7 +12,8 @@ const DEFAULT_WINDOW_WIDTH: usize = 800;
 pub struct Config {
     pub window: Option<WindowConfig>,
     pub world_map: WorldMapConfig,
-    pub camera: Camera,
+    pub camera: CameraConfig,
+    pub light: LightConfig,
 }
 
 impl Config {
@@ -32,8 +37,14 @@ impl Config {
         self.world_map.tile_height
     }
 
-    pub fn highlight_tile_pos_x(&self) -> f32 {
-        self.world_map.highlight_tile_pos_x
+    pub fn highlight_tile_position(&self) -> Vec3 {
+        self.world_map.highlight_tile_position
+    }
+
+    pub fn highlight_default_color(&self) -> Color {
+        let [r, g, b]: [f32; 3] = self.world_map.highlight_defualt_color.into();
+
+        Color::rgb(r, g, b)
     }
 
     pub fn map_size(&self) -> isize {
@@ -47,6 +58,14 @@ impl Config {
     pub fn camera_angle(&self) -> f32 {
         self.camera.angle
     }
+
+    pub fn light_position(&self) -> Vec3 {
+        self.light.position
+    }
+
+    pub fn light(&self) -> Light {
+        Light::from(&self.light)
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -56,32 +75,27 @@ pub struct WindowConfig {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct WorldMapConfig {
-    pub tile_radius: f32,
-    pub tile_height: f32,
-    pub highlight_tile_pos_x: f32,
-    pub map_size: isize, // TODO: for future i have to keep here some boundries?
-}
-
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Camera {
+pub struct CameraConfig {
     pub position: Vec3,
     pub angle: f32,
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct LightConfig {
+    pub position: Vec3,
+    pub color: Vec3,
+    pub depth: Vec2,
+    pub fov: f32,
+}
 
-    #[test]
-    fn test_camera_serailization() {
-        let camera = Camera {
-            position: Vec3::zero(),
-            angle: 1.0
-        };
-        let json = serde_json::to_string_pretty(&camera).unwrap();
-        println!("{}", json);
+impl<'a> From<&'a LightConfig> for Light {
+    fn from(light: &'a LightConfig) -> Self {
+        let [r, g, b]: [f32; 3] = light.color.into();
+        let [f, t]: [f32; 2] = light.depth.into();
+        let color = Color::rgb(r, g, b);
+        let depth = f..t;
+        let fov = light.fov;
 
-        panic!();
+        Self {color, depth, fov}
     }
 }
