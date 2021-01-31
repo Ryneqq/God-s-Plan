@@ -6,6 +6,7 @@ use crate::WorldMap;
 mod setup;
 mod mouse;
 mod update;
+mod debug;
 pub mod config;
 
 pub fn run_app(config: config::Config) {
@@ -29,7 +30,6 @@ pub fn run_app(config: config::Config) {
         // === Debug plugins ===
         // .add_plugin(DebugPickingPlugin)
         .add_plugin(FrameTimeDiagnosticsPlugin::default())
-        .add_plugin(PrintDiagnosticsPlugin::default())
         // =====================
         .add_startup_system(setup::setup.system())
         .add_system(mouse::mouse_position.system())
@@ -37,6 +37,10 @@ pub fn run_app(config: config::Config) {
         .add_system(mouse::mouse_drag.system())
         .add_system(update::update.system())
         .add_system(set_highlight_params.system())
+        // === Debug systems ===
+        .add_startup_system(debug::fps_debug.system())
+        .add_system(debug::fps_update.system())
+        // ====================
         .run();
 }
 
