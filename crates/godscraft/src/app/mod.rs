@@ -1,5 +1,4 @@
 use bevy::prelude::*;
-use bevy::diagnostic::{FrameTimeDiagnosticsPlugin, PrintDiagnosticsPlugin};
 use bevy_mod_picking::*;
 use crate::WorldMap;
 
@@ -24,25 +23,18 @@ pub fn run_app(config: config::Config) {
         .add_resource(WorldMap::new(config.tile_radius(), config.map_size()))
         .add_resource(config)
         .add_plugins(DefaultPlugins)
+        .add_plugin(gods_ui::GodsUI)
+        .add_plugin(gods_ui::GodsFpsCounter)
+        .add_plugin(gods_ui::GodsButton)
         .add_plugin(PickingPlugin)
         .add_plugin(InteractablePickingPlugin)
         // === Debug plugins ===
         // .add_plugin(DebugPickingPlugin)
-        .add_plugin(FrameTimeDiagnosticsPlugin::default())
-        .add_plugin(PrintDiagnosticsPlugin::default())
         // =====================
         .add_startup_system(setup::setup.system())
         .add_system(mouse::mouse_position.system())
         .add_system(mouse::mouse_scroll.system())
         .add_system(mouse::mouse_drag.system())
         .add_system(update::update.system())
-        .add_system(set_highlight_params.system())
         .run();
 }
-
-// move to some location as `picker`
-fn set_highlight_params(mut highlight_params: ResMut<PickHighlightParams>) {
-    highlight_params.set_hover_color(Color::rgb(1.0, 0.0, 0.0));
-    highlight_params.set_selection_color(Color::rgb(0.0, 1.0, 0.0));
-}
-

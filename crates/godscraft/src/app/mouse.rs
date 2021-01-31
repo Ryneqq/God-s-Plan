@@ -45,15 +45,18 @@ pub (super) fn mouse_drag(
     mut state: Local<MouseState>,
     mouse_button_input: Res<Input<MouseButton>>,
     mouse_motion_events: Res<Events<MouseMotion>>,
-    mut camera_query: Query<(&Camera, &mut Transform)>
+    mut camera_query: Query<(&Camera, &mut Transform, &Without<gods_ui::GodsUI>)>
 ) {
      if mouse_button_input.pressed(MouseButton::Right)  {
-        for (_, ref mut transform) in camera_query.iter_mut() {
+        for (_, ref mut transform, _) in camera_query.iter_mut() {
             for event in state.mouse_motion_event_reader.iter(&mouse_motion_events) {
+                let height = transform.translation.z;
                 let drag_vec = transform.rotation * Vec3::new(-event.delta.x, event.delta.y, 0f32);
                 let magnitude = 0.1;
 
+
                 transform.translation += drag_vec * magnitude;
+                transform.translation.z = height;
             }
         }
     }

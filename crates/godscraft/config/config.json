@@ -1,22 +1,22 @@
 {
     "window": {
-        "height": 1080,
-        "width": 1920
+        "height": 720,
+        "width": 1080
     },
     "world_map": {
         "tile_radius": 1.04,
         "tile_height": 0.2,
         "highlight_tile_position": [0.0, 0.199, 0.0],
         "highlight_defualt_color": [0.5, 0.5, 0.5],
-        "map_size": 4,
+        "map_size": 8,
         "tiles": {
             "highlight": "tiles/empty/plane/empty_hextile_plane.gltf#Mesh0/Primitive0",
             "forest": "tiles/forest/lasiglasty.gltf"
         }
     },
     "camera": {
-        "position": [0.0, -2.0, 25.0],
-        "angle": 0.1
+        "position": [0.0, -2.0, 15.0],
+        "angle": 0.5
     },
     "light": {
         "position": [5.0, 2.0, 5.0],

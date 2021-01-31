@@ -7,11 +7,15 @@ pub (super) fn setup(
     commands: &mut Commands,
     asset_server: Res<AssetServer>,
     mut materials: ResMut<Assets<StandardMaterial>>,
+    mut highlight_params: ResMut<PickHighlightParams>,
     world: Res<WorldMap>,
     config: Res<Config>,
 ) {
     let empty_hextile = asset_server.load(config.world_map.get_mesh_path(Tiles::Highlight).unwrap());
     let hextile = asset_server.load(config.world_map.get_mesh_path(Tiles::Forest).unwrap());
+
+    highlight_params.set_hover_color(Color::rgb(1.0, 0.0, 0.0));
+    highlight_params.set_selection_color(Color::rgb(0.0, 1.0, 0.0));
 
     commands
         .spawn(Camera3dBundle {
