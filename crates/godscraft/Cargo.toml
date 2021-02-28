@@ -8,12 +8,14 @@ edition = "2018"
 
 [dependencies]
 itertools = "0.10.0"
-bevy_mod_picking = "0.3.2"
+bevy_mod_picking = "0.3.7"
 bevy = "0.4.0"
 serde = "1.0.118"
 serde_json = "1.0.61"
 
 gods_ui = { path = "../gods_ui" }
+# bevy_mod_picking = { git = "https://github.com/aevyrie/bevy_mod_picking", branch = "master"}
+# bevy = { git = "https://github.com/bevyengine/bevy", branch = "master" }
 
 [dev-dependencies]
 test-case = "1.0.0"

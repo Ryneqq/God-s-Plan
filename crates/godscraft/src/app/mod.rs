@@ -23,9 +23,6 @@ pub fn run_app(config: config::Config) {
         .add_resource(WorldMap::new(config.tile_radius(), config.map_size()))
         .add_resource(config)
         .add_plugins(DefaultPlugins)
-        .add_plugin(gods_ui::GodsUI)
-        .add_plugin(gods_ui::GodsFpsCounter)
-        .add_plugin(gods_ui::GodsButton)
         .add_plugin(PickingPlugin)
         .add_plugin(InteractablePickingPlugin)
         // === Debug plugins ===
@@ -36,5 +33,6 @@ pub fn run_app(config: config::Config) {
         .add_system(mouse::mouse_scroll.system())
         .add_system(mouse::mouse_drag.system())
         .add_system(update::update.system())
+        .add_plugin(gods_ui::GodsUI)
         .run();
 }
