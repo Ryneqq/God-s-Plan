@@ -13,7 +13,7 @@ pub struct Config {
     pub window: Option<WindowConfig>,
     pub world_map: WorldMapConfig,
     pub camera: CameraConfig,
-    pub light: LightConfig,
+    pub lights: Vec<LightConfig>,
 }
 
 impl Config {
@@ -59,12 +59,8 @@ impl Config {
         self.camera.angle
     }
 
-    pub fn light_position(&self) -> Vec3 {
-        self.light.position
-    }
-
-    pub fn light(&self) -> Light {
-        Light::from(&self.light)
+    pub fn lights(&'_ self) -> impl Iterator<Item = (Vec3, Light)> + '_ {
+        self.lights.iter().map(|light| (light.position, Light::from(light)))
     }
 }
 
@@ -83,19 +79,33 @@ pub struct CameraConfig {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct LightConfig {
     pub position: Vec3,
-    pub color: Vec3,
-    pub depth: Vec2,
-    pub fov: f32,
+    pub color: Option<Vec3>,
+    pub depth: Option<Vec2>,
+    pub fov: Option<f32>,
 }
 
 impl<'a> From<&'a LightConfig> for Light {
     fn from(light: &'a LightConfig) -> Self {
-        let [r, g, b]: [f32; 3] = light.color.into();
-        let [f, t]: [f32; 2] = light.depth.into();
-        let color = Color::rgb(r, g, b);
-        let depth = f..t;
-        let fov = light.fov;
+        let mut new_light = Self::default();
 
-        Self {color, depth, fov}
+        if let Some(color) = light.color {
+            let [r, g, b]: [f32; 3] = color.into();
+            let color = Color::rgb(r, g, b);
+
+            new_light.color = color;
+        }
+
+        if let Some(depth) = light.depth {
+            let [f, t]: [f32; 2] = depth.into();
+            let depth = f..t;
+
+            new_light.depth = depth;
+        }
+
+        if let Some(fov) = light.fov {
+            new_light.fov = fov
+        }
+
+        new_light
     }
 }

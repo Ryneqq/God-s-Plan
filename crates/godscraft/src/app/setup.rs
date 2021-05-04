@@ -29,12 +29,16 @@ pub (super) fn setup(
             },
             .. Default::default()
         })
-        .with(PickSource::default())
-        .spawn(LightBundle {
-            transform: Transform::from_translation(config.light_position()),
-            light: config.light(),
+        .with(PickSource::default());
+
+    for (pos, light) in config.lights() {
+        commands.spawn(LightBundle {
+            light,
+            transform: Transform::from_translation(pos),
             ..Default::default()
         });
+    }
+
 
     let mut transform = Transform::from_translation(Vec3::zero())
         .looking_at(Vec3::unit_x(), Vec3::unit_z());
