@@ -18,8 +18,8 @@ impl WorldMapConfig {
     }
 }
 
-#[serde(rename_all="snake_case")]
 #[derive(Debug, Copy, Clone, Serialize, Deserialize, PartialEq, Eq, Hash)]
+#[serde(rename_all="snake_case")]
 pub enum Tiles {
     Highlight,
     Forest,

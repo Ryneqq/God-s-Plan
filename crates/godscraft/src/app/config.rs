@@ -82,6 +82,8 @@ pub struct LightConfig {
     pub color: Option<Vec3>,
     pub depth: Option<Vec2>,
     pub fov: Option<f32>,
+    pub intensity: Option<f32>,
+    pub range: Option<f32>,
 }
 
 impl<'a> From<&'a LightConfig> for Light {
@@ -103,7 +105,15 @@ impl<'a> From<&'a LightConfig> for Light {
         }
 
         if let Some(fov) = light.fov {
-            new_light.fov = fov
+            new_light.fov = fov;
+        }
+
+        if let Some(intensity) = light.intensity {
+            new_light.intensity = intensity;
+        }
+
+        if let Some(range) = light.range {
+            new_light.range = range;
         }
 
         new_light

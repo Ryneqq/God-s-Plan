@@ -1,24 +1,24 @@
 use bevy::prelude::*;
-use bevy_mod_picking::*;
+use bevy_mod_picking::{PickingCameraBundle, PickableBundle};
 use crate::WorldMap;
 use super::config::{Config, Tiles};
 
 pub (super) fn setup(
-    commands: &mut Commands,
+    mut commands: Commands,
     asset_server: Res<AssetServer>,
     mut materials: ResMut<Assets<StandardMaterial>>,
-    mut highlight_params: ResMut<PickHighlightParams>,
+    // mut highlight_params: ResMut<PickHighlightParams>,
     world: Res<WorldMap>,
     config: Res<Config>,
 ) {
     let empty_hextile = asset_server.load(config.world_map.get_mesh_path(Tiles::Highlight).unwrap());
     let hextile = asset_server.load(config.world_map.get_mesh_path(Tiles::Forest).unwrap());
 
-    highlight_params.set_hover_color(Color::rgb(1.0, 0.0, 0.0));
-    highlight_params.set_selection_color(Color::rgb(0.0, 1.0, 0.0));
+    // highlight_params.set_hover_color(Color::rgb(1.0, 0.0, 0.0));
+    // highlight_params.set_selection_color(Color::rgb(0.0, 1.0, 0.0));
 
     commands
-        .spawn(Camera3dBundle {
+        .spawn_bundle(PerspectiveCameraBundle {
             transform: {
                 let mut transform = Transform::from_translation(config.camera_position());
                 let rotation = Quat::from_rotation_x(config.camera_angle());
@@ -29,10 +29,10 @@ pub (super) fn setup(
             },
             .. Default::default()
         })
-        .with(PickSource::default());
+        .insert_bundle(PickingCameraBundle::default());
 
     for (pos, light) in config.lights() {
-        commands.spawn(LightBundle {
+        commands.spawn_bundle(LightBundle {
             light,
             transform: Transform::from_translation(pos),
             ..Default::default()
@@ -48,18 +48,15 @@ pub (super) fn setup(
         transform.translation = hexagon_position;
 
         commands
-            .spawn((transform.clone(), GlobalTransform::default()))
+            .spawn_bundle((transform.clone(), GlobalTransform::default()))
             .with_children(|parent| {
-                parent.spawn(PbrBundle {
+                parent.spawn_bundle(PbrBundle {
                     mesh: empty_hextile.clone(),
                     material: materials.add(config.highlight_default_color().into()),
                     transform: Transform::from_translation(config.highlight_tile_position()),
                     ..Default::default()
                 })
-                .with(PickableMesh::default())
-                .with(InteractableMesh::default())
-                .with(HighlightablePickMesh::default())
-                .with(SelectablePickMesh::default());
+                .insert_bundle(PickableBundle::default());
             })
             .with_children(|parent| {
                 parent.spawn_scene(hextile.clone());

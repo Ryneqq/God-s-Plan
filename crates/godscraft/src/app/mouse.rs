@@ -1,38 +1,15 @@
 use bevy::{
     prelude::*,
     window::CursorMoved,
-    input::mouse::{MouseMotion, MouseWheel},
+    input::mouse::{MouseMotion, MouseWheel, MouseButtonInput},
     render::camera::Camera
 };
 
-#[derive(Default)]
-pub struct MouseState {
-    cursor_moved_event_reader: EventReader<CursorMoved>,
-    mouse_wheel_event_reader: EventReader<MouseWheel>,
-    mouse_motion_event_reader: EventReader<MouseMotion>,
-}
-
-#[derive(Debug, Default)]
-pub struct MousePosition {
-    pub position: Vec2
-}
-
-pub (super) fn mouse_position(
-    mut mouse: ResMut<MousePosition>,
-    mut state: Local<MouseState>,
-    cursor_moved_events: Res<Events<CursorMoved>>,
-) {
-    for event in state.cursor_moved_event_reader.iter(&cursor_moved_events) {
-        mouse.position = event.position;
-    }
-}
-
 pub (super) fn mouse_scroll(
-    mut state: Local<MouseState>,
-    mouse_wheel_events: Res<Events<MouseWheel>>,
+    mut mouse_wheel_events: EventReader<MouseWheel>,
     mut camera_query: Query<(&Camera, &mut Transform)>
 ) {
-    for event in state.mouse_wheel_event_reader.iter(&mouse_wheel_events) {
+    for event in mouse_wheel_events.iter() {
         for (_, mut transform) in camera_query.iter_mut() {
             let direction = quat_to_direction(transform.rotation);
             let scroll = event.y;
@@ -42,14 +19,13 @@ pub (super) fn mouse_scroll(
 }
 
 pub (super) fn mouse_drag(
-    mut state: Local<MouseState>,
+    mut mouse_motion_events: EventReader<MouseMotion>,
     mouse_button_input: Res<Input<MouseButton>>,
-    mouse_motion_events: Res<Events<MouseMotion>>,
     mut camera_query: Query<(&Camera, &mut Transform)>
 ) {
-     if mouse_button_input.pressed(MouseButton::Right)  {
+    if mouse_button_input.pressed(MouseButton::Right) {
         for (_, ref mut transform) in camera_query.iter_mut() {
-            for event in state.mouse_motion_event_reader.iter(&mouse_motion_events) {
+            for event in mouse_motion_events.iter() {
                 let height = transform.translation.z;
                 let drag_vec = transform.rotation * Vec3::new(-event.delta.x, event.delta.y, 0f32);
                 let magnitude = 0.1;

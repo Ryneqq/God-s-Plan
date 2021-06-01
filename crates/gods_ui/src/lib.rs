@@ -32,11 +32,11 @@ fn update_ui_scale_factor(mut egui_settings: ResMut<EguiSettings>, windows: Res<
     }
 }
 
-fn window(_world: &mut World, resources: &mut Resources) {
-    let mut egui_ctx = resources.get_mut::<EguiContext>().unwrap();
-    let ctx = &mut egui_ctx.ctx;
+fn window(egui_ctx: ResMut<EguiContext>) {
+    // let mut egui_ctx = resources.get_mut::<EguiContext>().unwrap();
+    // let ctx = &mut egui_ctx.ctx;
 
-    egui::Window::new("Window").scroll(true).show(ctx, |ui| {
+    egui::Window::new("Window").scroll(true).show(egui_ctx.ctx(), |ui| {
         ui.selectable_label(false, "Windows can be moved by dragging them.");
         ui.label("They are automatically sized based on contents.");
         ui.selectable_label(false, "You can turn on resizing and scrolling if you like.");
