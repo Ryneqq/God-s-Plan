@@ -8,10 +8,11 @@
         "tile_height": 0.2,
         "highlight_tile_position": [0.0, 0.199, 0.0],
         "highlight_defualt_color": [0.5, 0.5, 0.5],
-        "map_size": 8,
+        "map_size": 11,
         "tiles": {
             "highlight": "tiles/empty/plane/empty_hextile_plane.gltf#Mesh0/Primitive0",
-            "forest": "tiles/forest4/forest.gltf#Scene0"
+            "forest": "tiles/forest4/forest.gltf#Scene0",
+            "grassland": "tiles/grassland2/grassland.gltf#Scene0"
         }
     },
     "camera": {
@@ -20,9 +21,9 @@
     },
     "lights": [
         {
-            "position": [15.0, -5.0, 2.0],
-            "intensity": 15000,
-            "range": 1000
+            "position": [15.0, 3.0, 50.0],
+            "intensity": 26000,
+            "range": 10000
         }
     ]
 }

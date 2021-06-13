@@ -23,4 +23,5 @@ impl WorldMapConfig {
 pub enum Tiles {
     Highlight,
     Forest,
+    Grassland,
 }

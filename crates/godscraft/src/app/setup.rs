@@ -12,7 +12,8 @@ pub (super) fn setup(
     config: Res<Config>,
 ) {
     let empty_hextile = asset_server.load(config.world_map.get_mesh_path(Tiles::Highlight).unwrap());
-    let hextile = asset_server.load(config.world_map.get_mesh_path(Tiles::Forest).unwrap());
+    let forest_hextile = asset_server.load(config.world_map.get_mesh_path(Tiles::Forest).unwrap());
+    let grassland_hextile = asset_server.load(config.world_map.get_mesh_path(Tiles::Grassland).unwrap());
 
     // highlight_params.set_hover_color(Color::rgb(1.0, 0.0, 0.0));
     // highlight_params.set_selection_color(Color::rgb(0.0, 1.0, 0.0));
@@ -59,7 +60,11 @@ pub (super) fn setup(
                 .insert_bundle(PickableBundle::default());
             })
             .with_children(|parent| {
-                parent.spawn_scene(hextile.clone());
+                if rand::random() {
+                    parent.spawn_scene(forest_hextile.clone());
+                } else {
+                    parent.spawn_scene(grassland_hextile.clone());
+                }
             });
     }
 }

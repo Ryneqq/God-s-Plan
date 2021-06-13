@@ -15,7 +15,7 @@ pub fn run_app(config: config::Config) {
             width: config.window_width() as f32,
             height: config.window_height() as f32,
             vsync: true,
-            resizable: false,
+            resizable: true,
             ..Default::default()
         })
         .insert_resource(ClearColor(Color::rgb(0.5, 0.5, 0.5)))
